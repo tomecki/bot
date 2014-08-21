@@ -12,8 +12,9 @@ class MieszkamItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     area = scrapy.Field()
-    name = scrapy.Field()
     price = scrapy.Field()
     rooms = scrapy.Field()
     street = scrapy.Field()
+    link = scrapy.Field()
+    # content = scrapy.Field()
     pass
