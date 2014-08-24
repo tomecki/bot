@@ -1,7 +1,9 @@
 W katalogu bota:
 
-virtualenv venv
-pip install -r requirements
+    virtualenv venv
+    pip install -r requirements.txt
 
-scrapy crawl olx -o olx.json
-scrapy crawl gumtree -o gumtree.json
+    source venv/bin/activate
+
+    scrapy crawl olx -o olx.json
+    scrapy crawl gumtree -o gumtree.json
