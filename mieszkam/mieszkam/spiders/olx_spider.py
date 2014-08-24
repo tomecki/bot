@@ -8,7 +8,7 @@ import scrapy
 from mieszkam.items import MieszkamItem
 from urlparse import urlparse, urljoin
 
-class GumtreeSpider(scrapy.Spider):
+class OlxSpider(scrapy.Spider):
     name = "olx"
     allowed_domains = ["olx.pl"]
     start_urls = [
@@ -45,5 +45,5 @@ class GumtreeSpider(scrapy.Spider):
             item["rooms"] = float(re.sub("\D", "", d["Liczba pokoi:"]))
         except:
             item["rooms"] = 1.0
-
+        item["link"] = str(response.url)
         return item

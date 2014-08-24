@@ -16,5 +16,8 @@ class MieszkamItem(scrapy.Item):
     rooms = scrapy.Field()
     street = scrapy.Field()
     link = scrapy.Field()
+    heating = scrapy.Field()
+    dateadd = scrapy.Field()
+    dateupdate = scrapy.Field()
     # content = scrapy.Field()
     pass

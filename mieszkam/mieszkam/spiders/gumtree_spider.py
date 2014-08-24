@@ -49,4 +49,9 @@ class GumtreeSpider(scrapy.Spider):
             except:
                 item["rooms"] = 1.0
         item["link"] = str(response.url)
+        if "Ostatnio zmieniony" not in d.keys():
+            item["dateadd"] = re.sub('\/', '.', d["Data dodania"])
+        else:
+            item["dateadd"] = re.sub('\/', '.', d["Data dodania"])
+            item["dateupdate"] = re.sub('\/', '.', d["Ostatnio zmieniony"])
         return item
