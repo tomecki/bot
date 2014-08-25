@@ -1,0 +1,228 @@
+<html>
+<head>
+<style>
+
+
+@import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,700);
+
+body {
+  font-family: "Helvetica Neue";
+  margin: 40px auto;
+  width: 960px;
+  min-height: 2000px;
+}
+
+#body {
+  position: relative;
+}
+
+footer {
+  padding: 2em 0 1em 0;
+  font-size: 12px;
+}
+
+h1 {
+  font-size: 96px;
+  margin-top: .3em;
+  margin-bottom: 0;
+}
+
+h1 + h2 {
+  margin-top: 0;
+}
+
+h2 {
+  font-weight: 400;
+  font-size: 28px;
+}
+
+h1, h2 {
+  font-family: "Yanone Kaffeesatz";
+  text-rendering: optimizeLegibility;
+}
+
+#body > p {
+  line-height: 1.5em;
+  width: 640px;
+  text-rendering: optimizeLegibility;
+}
+
+#charts {
+  padding: 10px 0;
+}
+
+.chart {
+  display: inline-block;
+  height: 151px;
+  margin-bottom: 20px;
+}
+
+.reset {
+  padding-left: 1em;
+  font-size: smaller;
+  color: #ccc;
+}
+
+.background.bar {
+  fill: #ccc;
+}
+
+.foreground.bar {
+  fill: steelblue;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+.brush rect.extent {
+  fill: steelblue;
+  fill-opacity: .125;
+}
+
+.brush .resize path {
+  fill: #eee;
+  stroke: #666;
+}
+
+#hour-chart {
+  width: 260px;
+}
+
+#delay-chart {
+  width: 230px;
+}
+
+#distance-chart {
+  width: 420px;
+}
+
+#date-chart {
+  width: 920px;
+}
+
+#flight-list {
+  min-height: 1024px;
+}
+
+#flight-list .date,
+#flight-list .day {
+  margin-bottom: .4em;
+}
+
+#flight-list .flight {
+  line-height: 1.5em;
+  background: #eee;
+  width: 640px;
+  margin-bottom: 1px;
+}
+
+#flight-list .time {
+  color: #999;
+}
+
+#flight-list .flight div {
+  display: inline-block;
+  width: 100px;
+}
+
+#flight-list div.distance,
+#flight-list div.delay {
+  width: 160px;
+  padding-right: 10px;
+  text-align: right;
+}
+
+#flight-list .early {
+  color: green;
+}
+
+aside {
+  position: absolute;
+  left: 740px;
+  font-size: smaller;
+  width: 220px;
+}
+
+</style>
+</head>
+<body>
+<div class="info" style="left:0px; position:fixed; width: 200px">
+<h3 id="link"></h3>
+<table>
+<tr><td>Cena: </td><td id="price"></td></tr>
+<tr><td>Powierzchnia: </td><td id="area"></td></tr>
+<tr><td>L. pokoi: </td><td id="rooms"></td></tr>
+<tr><td>Data dodania: </td><td id="dateadd"></td></tr>
+<tr><td>Ulica: </td><td id="street"></td></tr>
+</table>
+</div>
+<div id="scatterplot" >
+
+</div>
+ 
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+
+
+<script type="text/javascript">
+
+
+d3.json("gumtree-24082014-1.json", function(error, data){
+
+var fmt = d3.time.format("%d.%m.%Y");
+data.forEach(function(d,i){
+	d.date = fmt.parse(d.dateadd);
+});
+var xmax=2500, ymax=70, rmax=6;
+
+var size = 800;
+var createScatterplot = function(xmax, ymax, rmax) {
+    var scatterplot = d3.select("div#scatterplot").append("svg:svg").attr("width", size).attr("height", size);
+    var xs = d3.scale.linear().domain([0, xmax]).range([0, 800]);
+    var ys = d3.scale.linear().domain([0, ymax]).range([800, 0]);
+    var rs = d3.scale.linear().domain([0, rmax]).range([10, 0]);
+    var cs = d3.scale.linear().domain([new Date(2014, 6, 15), new Date(2014, 7, 25)]).range(["red", "green"]);
+    var margin = 10;
+    scatterplot.selectAll("circle").data(data).enter()
+    .append("a").attr("xlink:href", function(d){return d.link; })
+    .append("svg:circle").attr("cx", function(d, i) {
+        return margin+xs(d.price);
+    }).attr("cy", function(d, i) {
+        return margin+ys(d.area);
+    }).attr("r", function(d) {
+        return d.rooms*2;
+       })
+    .attr("fill", function(d){
+    	return cs(d.date);
+    })
+    .on("mouseover", function(d){
+       	d3.select("#link").text(d.link);
+       	d3.select("#price").text(d.price);
+       	d3.select("#area").text(d.area);
+       	d3.select("#rooms").text(d.rooms);
+       	d3.select("#dateadd").text(d.dateadd);
+       	d3.select("#street").text(d.street);
+
+       } );
+
+    
+};
+		
+
+createScatterplot(xmax, ymax, rmax);
+
+
+
+});
+</script>
+</body>
+
+</html>
